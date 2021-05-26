@@ -20,9 +20,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
+    public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;//código de solicitud
 
-    private WordViewModel mWordViewModel;
+    private WordViewModel mWordViewModel;//variable para el ViewModel
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +37,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Get a new or existing ViewModel from the ViewModelProvider.
+        // obteniendo el ViewModel
         mWordViewModel = ViewModelProviders.of(this).get(WordViewModel.class);
 
-        // Add an observer on the LiveData returned by getAlphabetizedWords.
-        // The onChanged() method fires when the observed data changes and the activity is
-        // in the foreground.
+        //añadiendo el observador de LiveData retornado por el método getAlphabetizedWords
         mWordViewModel.getAllWords().observe(this, new Observer<List<Word>>() {
             @Override
             public void onChanged(@Nullable final List<Word> words) {
-                // Update the cached copy of the words in the adapter.
+                // actualizando las palabras en el adaptador
                 adapter.setWords(words);
             }
         });
@@ -55,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //inicializa la clase NewWordActivity cuando el usuario presiona el boton de agregar
                 Intent intent = new Intent(MainActivity.this, NewWordActivity.class);
                 startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
             }
@@ -78,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+// If la activity retorna RESULT_OK, se inserta la palabra enviada desde la clase NewWordActivity
+// en la base de datos con el método insert()
         if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             Word word = new Word(data.getStringExtra(NewWordActivity.EXTRA_REPLY));
             mWordViewModel.insert(word);

@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 /**
- * Activity for entering a word.
+ * Clase que enviara la palabra ,ediante un intent a la clase MainActivity para ser agregada a
+ * la base de datos
  */
 
 public class NewWordActivity extends AppCompatActivity {
